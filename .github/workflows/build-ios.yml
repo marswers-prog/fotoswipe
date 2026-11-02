@@ -1,0 +1,53 @@
+name: FotoSwipe fuer iPhone bauen
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'FotoSwipe/**'
+      - 'FotoSwipe.xcodeproj/**'
+      - 'scripts/**'
+      - '.github/workflows/build-ios.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fotoswipe-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Kostenfreier Standard-Mac-Build
+    if: github.event.repository.private == false
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - name: Quellcode laden
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Xcode-Version anzeigen
+        run: xcodebuild -version
+
+      - name: iPhone-App bauen und IPA packen
+        run: bash scripts/build-ipa.sh
+
+      - name: Installationsdatei bereitstellen
+        uses: actions/upload-artifact@v7
+        with:
+          name: FotoSwipe-iPhone
+          path: dist/FotoSwipe.ipa
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Build-Protokoll bei Fehler bereitstellen
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: FotoSwipe-Buildfehler
+          path: build/xcodebuild.log
+          if-no-files-found: ignore
+          retention-days: 3
