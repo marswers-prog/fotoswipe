@@ -19,7 +19,7 @@ Die App überträgt keine Fotos an einen eigenen Server und enthält keine Analy
 
 ## Kostenlos mit Windows installieren
 
-Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Der erste echte Build und Gerätetest stehen noch aus.
+Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Der erste Geräte-Build ist erfolgreich. Die Installation und der Funktionstest auf einem echten iPhone stehen noch aus.
 
 ## Alternativ mit einem Mac starten
 
@@ -37,7 +37,11 @@ Ein kostenloses persönliches Xcode-Team kann zum Testen dienen. Signierung und 
 
 ## Prüfstatus
 
-Das Projekt wurde in einer Linux-Umgebung erstellt. Dort sind Xcode, SwiftUI und das iOS SDK nicht verfügbar. Daher wurden weder ein iOS-Build noch Simulator- oder Gerätetests durchgeführt. Geprüft wurden die Dateistruktur, XML-/Plist-Dateien, Projektverweise und das ZIP-Archiv. Der erste echte Kompilierungslauf steht auf dem vorbereiteten GitHub-macOS-Runner oder einem eigenen Mac aus. Der neue Workflow, die Shell-Syntax und das IPA-Packen wurden separat lokal geprüft; eine erfolgreich gebaute IPA liegt noch nicht vor.
+Am 2. November 2026 wurde die App mit Xcode 16.4 und dem iPhoneOS-18.5-SDK für arm64 / iOS 17+ erfolgreich kompiliert und als unsignierte `FotoSwipe.ipa` verpackt. Der Build verwendet den kostenlosen Standard-Runner `macos-15-intel`, nachdem ein ARM-Runner wegen Kapazitätsproblemen nicht verfügbar war. Der fehlende PhotosUI-Import wurde beim ersten Kompilierungslauf korrigiert.
+
+[Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41520623214) · [IPA-Artefakt herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41520623214/artifacts/13177762431) (bei GitHub anmelden, ZIP entpacken; dieses Artefakt wird am 9. November 2026 entfernt und kann durch einen neuen Build erneut erzeugt werden).
+
+Zusätzlich wurden Projektstruktur, XML-/Plist-Dateien, YAML und das IPA-Packen mit Testdaten geprüft. Simulator- und Gerätetests wurden noch nicht durchgeführt. Ein erfolgreicher Build bestätigt die Kompilierung, nicht das Laufzeitverhalten mit einer echten Fotomediathek.
 
 ## Geräteprüfung vor produktiver Verwendung
 
