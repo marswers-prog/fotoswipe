@@ -8,6 +8,10 @@ Mit „… Fotos jetzt löschen“ werden die aktuell zugänglichen vorgemerkten
 
 Die Löschliste bleibt auch nach dem Schließen der App erhalten. Ein ausdrückliches Zurücksetzen der Merkliste leert nur den abgeschlossenen Fortschritt, nicht die Löschliste.
 
+## Fotos genauer ansehen
+
+Ein Tippen auf die Bildmitte öffnet das Foto in einer Vollbildansicht. Mit zwei Fingern lässt sich das Bild bis zum Achtfachen der eingepassten Ansicht vergrößern und der vergrößerte Ausschnitt verschieben. Doppeltippen vergrößert den angetippten Bereich bzw. setzt den Zoom zurück. „Schließen“ führt zurück zum Sortieren. Die Ansicht selbst führt keine Behalten- oder Löschentscheidung aus. Bei Bedarf wird eine höher aufgelöste Vorschau mit bis zu 4.096 Pixeln an der längsten Kante geladen; bei iCloud-Fotos kann dafür Internet nötig sein. Auch aus der Detailansicht der Löschliste lässt sich die Zoomansicht öffnen.
+
 ## Bestehende Installation aktualisieren
 
 1. Notiere vorab den angezeigten Fortschritt in den FotoSwipe-Einstellungen. Wenn du ohnehin ein iPhone-Backup auf dem PC verwendest, aktualisiere es vor dem Update.

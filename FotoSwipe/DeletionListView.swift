@@ -10,6 +10,7 @@ struct DeletionListView: View {
     @ObservedObject var store: PhotoStore
     @Environment(\.dismiss) private var dismiss
     @State private var selection: PendingPhotoSelection?
+    @State private var zoomSelection: PhotoZoomSelection?
 
     var body: some View {
         NavigationStack {
@@ -85,11 +86,19 @@ struct DeletionListView: View {
                     VStack(spacing: 12) {
                         AssetPreview(asset: item.asset, thumbnail: false)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                zoomSelection = PhotoZoomSelection(asset: item.asset, preview: nil)
+                            }
+                        Text("Bild antippen zum Zoomen").font(.caption).foregroundStyle(.secondary)
                         Button("Dieses Foto behalten") {
                             store.keepPending(item.id)
                             selection = nil
                         }.buttonStyle(.borderedProminent).tint(.green).padding(.bottom)
                     }.padding(.horizontal)
+                    .fullScreenCover(item: $zoomSelection) { selected in
+                        PhotoZoomView(asset: selected.asset, preview: selected.preview)
+                    }
                     .navigationTitle("Vorgemerktes Foto")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {

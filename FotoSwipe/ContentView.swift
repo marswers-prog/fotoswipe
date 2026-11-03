@@ -6,6 +6,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var settings = false
     @State private var deletionList = false
+    @State private var zoomSelection: PhotoZoomSelection?
     @State private var drag = CGSize.zero
     private let mint = Color(red: 0.55, green: 0.92, blue: 0.73)
     private let coral = Color(red: 1, green: 0.53, blue: 0.49)
@@ -38,6 +39,9 @@ struct ContentView: View {
         .preferredColorScheme(.dark)
         .sheet(isPresented: $settings) { SettingsView(store: store) }
         .sheet(isPresented: $deletionList) { DeletionListView(store: store) }
+        .fullScreenCover(item: $zoomSelection) { item in
+            PhotoZoomView(asset: item.asset, preview: item.preview)
+        }
         .alert("FotoSwipe", isPresented: Binding(get: { store.message != nil }, set: { if !$0 { store.message = nil } })) {
             Button("OK") { store.message = nil }
         } message: { Text(store.message ?? "") }
@@ -66,6 +70,15 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .offset(drag)
                         .rotationEffect(.degrees(Double(drag.width / 28)))
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            guard store.canAct, let asset = store.current else { return }
+                            zoomSelection = PhotoZoomSelection(asset: asset, preview: store.image)
+                        }
+                        .accessibilityAction(named: Text("Foto in Vollbild öffnen")) {
+                            guard store.canAct, let asset = store.current else { return }
+                            zoomSelection = PhotoZoomSelection(asset: asset, preview: store.image)
+                        }
                         .gesture(DragGesture(minimumDistance: 20)
                             .onChanged { value in if store.canAct { drag = value.translation } }
                             .onEnded { value in
@@ -98,7 +111,7 @@ struct ContentView: View {
             }
             VStack(spacing: 5) {
                 Text(store.status).font(.footnote).foregroundStyle(mint).lineLimit(2)
-                Text("Wischen oder auf die Randbeschriftung tippen")
+                Text("Wischen zum Sortieren · Bild antippen zum Zoomen")
                     .font(.caption2).foregroundStyle(.gray)
             }.frame(minHeight: 38).padding(.horizontal)
         }
@@ -215,6 +228,8 @@ struct SettingsView: View {
                     Label("Oben: im oberen Album behalten", systemImage: "arrow.up")
                     Label("Unten: im unteren Album behalten", systemImage: "arrow.down")
                     Text("Rechts wischen speichert das Foto in deiner Löschliste und zeigt sofort das nächste. Öffne die Liste über das Papierkorb-Symbol. Dort kannst du Fotos behalten oder alle verfügbaren vorgemerkten Fotos mit einer gemeinsamen iOS-Bestätigung löschen. Bei Abbruch bleibt die Liste gespeichert. Gelöschte Fotos können auch aus iCloud und von synchronisierten Geräten verschwinden.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                    Text("Tippe auf die Bildmitte, um ein Foto in Vollbild zu öffnen. Mit zwei Fingern kannst du zoomen und den Ausschnitt verschieben. Doppeltippen vergrößert oder setzt den Zoom zurück.")
                         .font(.footnote).foregroundStyle(.secondary)
                     Text("Live Photos werden als Standbild angezeigt, aber als ganzes Foto einsortiert oder gelöscht. Videos sind in dieser Version ausgeblendet.")
                         .font(.footnote).foregroundStyle(.secondary)
