@@ -5,6 +5,7 @@ struct ContentView: View {
     @StateObject private var store = PhotoStore()
     @Environment(\.scenePhase) private var scenePhase
     @State private var settings = false
+    @State private var deletionList = false
     @State private var drag = CGSize.zero
     private let mint = Color(red: 0.55, green: 0.92, blue: 0.73)
     private let coral = Color(red: 1, green: 0.53, blue: 0.49)
@@ -20,6 +21,12 @@ struct ContentView: View {
                             .font(.subheadline).foregroundStyle(.gray)
                     }
                     Spacer()
+                    Button { deletionList = true } label: {
+                        Label("\(store.pendingCount)", systemImage: "trash")
+                            .font(.subheadline.bold()).padding(11)
+                            .background(coral.opacity(0.12), in: Capsule())
+                    }.accessibilityLabel("Löschliste, \(store.pendingCount) Fotos vorgemerkt")
+                        .disabled(store.busy || !store.accessible)
                     Button { settings = true } label: {
                         Image(systemName: "slider.horizontal.3").font(.title3).padding(13)
                             .background(.white.opacity(0.08), in: Circle())
@@ -30,6 +37,7 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $settings) { SettingsView(store: store) }
+        .sheet(isPresented: $deletionList) { DeletionListView(store: store) }
         .alert("FotoSwipe", isPresented: Binding(get: { store.message != nil }, set: { if !$0 { store.message = nil } })) {
             Button("OK") { store.message = nil }
         } message: { Text(store.message ?? "") }
@@ -74,11 +82,20 @@ struct ContentView: View {
                             Text("löschen").font(.caption2.bold()).rotationEffect(.degrees(90))
                                 .fixedSize().frame(width: 30, height: 78)
                         }.foregroundStyle(coral).frame(width: 38, height: geo.size.height)
-                    }.disabled(!store.canAct).accessibilityLabel("Foto löschen, iOS fragt nach Bestätigung")
+                    }.disabled(!store.canAct).accessibilityLabel("Foto zum Löschen vormerken")
                 }
             }
             edgeButton(store.title(for: store.downID, fallback: "Album unten wählen"), icon: "arrow.down", color: mint, action: .down)
                 .padding(.horizontal, 38)
+            if store.pendingCount > 0 {
+                Button {
+                    deletionList = true
+                } label: {
+                    Label("Löschliste prüfen (\(store.pendingCount))", systemImage: "trash")
+                        .font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.vertical, 10)
+                }.buttonStyle(.bordered).tint(coral).padding(.horizontal, 38)
+                    .disabled(store.busy)
+            }
             VStack(spacing: 5) {
                 Text(store.status).font(.footnote).foregroundStyle(mint).lineLimit(2)
                 Text("Wischen oder auf die Randbeschriftung tippen")
@@ -142,7 +159,7 @@ struct ContentView: View {
             Spacer()
             Image(systemName: "photo.stack").font(.system(size: 64)).foregroundStyle(mint)
             Text("Ein Foto. Eine Entscheidung.").font(.title2.bold()).multilineTextAlignment(.center)
-            Text("Links behalten, rechts löschen. Nach oben oder unten in deine zwei Lieblingsalben einsortieren.")
+            Text("Links behalten, rechts zum Löschen vormerken. Nach oben oder unten in deine zwei Lieblingsalben einsortieren.")
                 .foregroundStyle(.gray).multilineTextAlignment(.center)
             Text("Deine Fotos werden nicht an einen eigenen Server übertragen. iCloud-Fotos werden bei Bedarf von Apple geladen.")
                 .font(.caption).foregroundStyle(.gray).multilineTextAlignment(.center)
@@ -190,14 +207,14 @@ struct SettingsView: View {
                 } header: {
                     Text("Fortschritt")
                 } footer: {
-                    Text("Setzt nur die Merkliste zurück. Fotos und Albumzuordnungen werden dadurch nicht verändert.")
+                    Text("Setzt nur die Merkliste zurück. Fotos und Albumzuordnungen werden dadurch nicht verändert. Deine Löschliste bleibt gespeichert.")
                 }
                 Section("So funktioniert’s") {
                     Label("Links: behalten", systemImage: "arrow.left")
-                    Label("Rechts: löschen", systemImage: "arrow.right")
+                    Label("Rechts: zum Löschen vormerken", systemImage: "arrow.right")
                     Label("Oben: im oberen Album behalten", systemImage: "arrow.up")
                     Label("Unten: im unteren Album behalten", systemImage: "arrow.down")
-                    Text("Beim Löschen fordert iOS eine Bestätigung an. Bei Abbruch bleibt das Foto angezeigt. Gelöschte Fotos können auch aus iCloud und von synchronisierten Geräten verschwinden.")
+                    Text("Rechts wischen speichert das Foto in deiner Löschliste und zeigt sofort das nächste. Öffne die Liste über das Papierkorb-Symbol. Dort kannst du Fotos behalten oder alle verfügbaren vorgemerkten Fotos mit einer gemeinsamen iOS-Bestätigung löschen. Bei Abbruch bleibt die Liste gespeichert. Gelöschte Fotos können auch aus iCloud und von synchronisierten Geräten verschwinden.")
                         .font(.footnote).foregroundStyle(.secondary)
                     Text("Live Photos werden als Standbild angezeigt, aber als ganzes Foto einsortiert oder gelöscht. Videos sind in dieser Version ausgeblendet.")
                         .font(.footnote).foregroundStyle(.secondary)

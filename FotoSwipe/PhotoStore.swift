@@ -26,21 +26,31 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
     @Published var downID: String { didSet { defaults.set(downID, forKey: "downAlbum") } }
     private let defaults = UserDefaults.standard
     private let manager = PHCachingImageManager()
-    private var reviewed: Set<String>
+    @Published private(set) var reviewState: ReviewState
+    @Published private(set) var pendingAssets: [PHAsset] = []
     private var requestID: PHImageRequestID = PHInvalidImageRequestID
     private var loadToken = UUID()
     private var observing = false
 
     var accessible: Bool { authorization == .authorized || authorization == .limited }
     var canAct: Bool { current != nil && image != nil && !loading && !busy }
-    var reviewedCount: Int { reviewed.count }
+    var reviewedCount: Int { reviewState.reviewed.count }
+    var pendingCount: Int { reviewState.pending.count }
+    var unavailablePendingCount: Int { pendingCount - pendingAssets.count }
 
     override init() {
         let saved = UserDefaults.standard
-        reviewed = Set(saved.stringArray(forKey: "reviewed") ?? [])
+        var restoreError: String?
+        do {
+            reviewState = try ReviewState(defaults: saved)
+        } catch {
+            reviewState = ReviewState(reviewed: Set(saved.stringArray(forKey: "reviewed") ?? []))
+            restoreError = "Die Löschliste konnte nicht gelesen werden. Deine bisherige Merkliste bleibt erhalten. Es wurden keine Fotos gelöscht."
+        }
         upID = saved.string(forKey: "upAlbum") ?? ""
         downID = saved.string(forKey: "downAlbum") ?? ""
         super.init()
+        message = restoreError
     }
 
     func start() {
@@ -65,10 +75,12 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
         guard !busy else { return }
         authorization = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         guard accessible else {
-            current = nil; image = nil; albums = []; remaining = 0
+            current = nil; image = nil; albums = []; pendingAssets = []; remaining = 0
             cancelImage(); return
         }
         refreshAlbums()
+        refreshPendingAssets()
+        let skipped = reviewState.reviewed.union(reviewState.pending)
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         let fetched = PHAsset.fetchAssets(with: .image, options: options)
@@ -77,7 +89,7 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
         var count = 0
         let currentID = current?.localIdentifier
         fetched.enumerateObjects { asset, _, _ in
-            if !self.reviewed.contains(asset.localIdentifier) {
+            if !skipped.contains(asset.localIdentifier) {
                 count += 1
                 if first == nil { first = asset }
                 if asset.localIdentifier == currentID { stillCurrent = asset }
@@ -147,6 +159,15 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
             finish(asset, text: "Behalten")
             return
         }
+        if action == .delete {
+            var changed = reviewState
+            changed.stageDeletion(asset.localIdentifier)
+            guard saveState(changed) else { return }
+            status = "Zum Löschen vorgemerkt – noch nicht gelöscht."
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            refresh()
+            return
+        }
         if action == .up || action == .down {
             guard authorization == .authorized else {
                 message = "Für Alben bitte in den iPhone-Einstellungen vollständigen Fotozugriff erlauben."; return
@@ -165,24 +186,71 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
                 finish(asset, text: "In „\(album.localizedTitle ?? "Album")“ abgelegt")
             } catch { report(error) }
             endOperation()
-        } else {
-            busy = true
-            do {
-                try await PHPhotoLibrary.shared().performChanges {
-                    PHAssetChangeRequest.deleteAssets([asset] as NSArray)
-                }
-                finish(asset, text: "Gelöscht")
-            } catch { report(error) }
-            endOperation()
         }
     }
 
     private func finish(_ asset: PHAsset, text: String) {
-        reviewed.insert(asset.localIdentifier)
-        defaults.set(Array(reviewed), forKey: "reviewed")
+        var changed = reviewState
+        changed.markReviewed(asset.localIdentifier)
+        guard saveState(changed) else { return }
         status = text
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         if !busy { refresh() }
+    }
+
+    private func saveState(_ changed: ReviewState) -> Bool {
+        do {
+            try changed.save(to: defaults)
+            reviewState = changed
+            return true
+        } catch {
+            message = "Dein Fortschritt konnte nicht gespeichert werden. Bitte versuche es erneut."
+            return false
+        }
+    }
+
+    private func refreshPendingAssets() {
+        guard !reviewState.pending.isEmpty else { pendingAssets = []; return }
+        let fetched = PHAsset.fetchAssets(withLocalIdentifiers: reviewState.pending, options: nil)
+        var available: [String: PHAsset] = [:]
+        fetched.enumerateObjects { asset, _, _ in available[asset.localIdentifier] = asset }
+        pendingAssets = reviewState.pending.compactMap { available[$0] }
+        // Missing / unshared identifiers remain saved; limited access isn't deletion.
+    }
+
+    func keepPending(_ id: String) {
+        guard !busy, reviewState.pending.contains(id) else { return }
+        var changed = reviewState
+        changed.markReviewed(id)
+        guard saveState(changed) else { return }
+        status = "Foto behalten und aus der Löschliste genommen."
+        refresh()
+    }
+
+    func deletePending() async {
+        guard !busy, accessible, !pendingAssets.isEmpty else { return }
+        let assets = pendingAssets
+        let ids = Set(assets.map(\.localIdentifier))
+        busy = true
+        do {
+            // Exactly one change request and one system confirmation for the batch.
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.deleteAssets(assets as NSArray)
+            }
+            var changed = reviewState
+            changed.completeDeletion(ids)
+            if saveState(changed) {
+                status = "\(assets.count) Fotos gelöscht."
+            }
+        } catch {
+            let ns = error as NSError
+            if ns.domain == PHPhotosErrorDomain && ns.code == PHPhotosError.Code.userCancelled.rawValue {
+                status = "Löschen abgebrochen – deine Löschliste bleibt gespeichert."
+            } else {
+                message = "Die Fotos konnten nicht gelöscht werden. Deine Löschliste bleibt gespeichert.\n\n\(error.localizedDescription)"
+            }
+        }
+        endOperation()
     }
 
     private func endOperation() {
@@ -229,8 +297,9 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
 
     func restart() {
         guard !busy else { return }
-        reviewed.removeAll()
-        defaults.removeObject(forKey: "reviewed")
+        var changed = reviewState
+        changed.resetReviewed()
+        guard saveState(changed) else { return }
         status = "Neue Runde gestartet."
         refresh()
     }
