@@ -1,5 +1,7 @@
 # FotoSwipe 1.1 – Löschliste und Update ohne Zurücksetzen
 
+[Version 1.1 herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41709532313/artifacts/13266827393) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41709532313). Bei GitHub anmelden und die heruntergeladene ZIP entpacken. Die Datei darin heißt `FotoSwipe.ipa`.
+
 ## Was sich ändert
 
 Rechts wischen merkt ein Foto zum Löschen vor und zeigt sofort das nächste. Es wird dabei noch kein Foto aus Apple Fotos gelöscht. Über das Papierkorb-Symbol oder „Löschliste prüfen“ öffnest du die Liste. Du kannst ein Foto groß ansehen und mit „Behalten“ wieder aus der Löschliste nehmen. Dieses Foto gilt anschließend als bearbeitet.
@@ -28,6 +30,6 @@ Der Erhalt der Daten setzt voraus, dass iOS die Installation als Update derselbe
 
 ## Automatische Prüfungen
 
-Der Workflow führt vor dem iPhone-Build echte Swift-Prüfungen der gespeicherten Merkliste aus. Sie prüfen unter anderem die Migration von 2.307 alten Einträgen, den Erhalt beider Albumkennungen, doppelte Vormerkungen, Speicherung über App-Neustarts, das Zurücknehmen einzelner Vormerkungen, die Verarbeitung nur tatsächlich gelöschter Einträge sowie das explizite Zurücksetzen bei erhaltener Löschliste.
+Die Swift-Prüfungen und der iPhone-Build mit Löschliste und Zoom sind am 3. November 2026 erfolgreich abgeschlossen worden. Der Workflow führt vor dem iPhone-Build echte Swift-Prüfungen der gespeicherten Merkliste aus. Sie prüfen unter anderem die Migration von 2.307 alten Einträgen, den Erhalt beider Albumkennungen, doppelte Vormerkungen, Speicherung über App-Neustarts, das Zurücknehmen einzelner Vormerkungen, die Verarbeitung nur tatsächlich gelöschter Einträge sowie das explizite Zurücksetzen bei erhaltener Löschliste.
 
 Die Systemabfrage, die tatsächliche Löschung in Apple Fotos und das Update über AltServer müssen auf einem echten iPhone getestet werden.

@@ -1,4 +1,4 @@
-# FotoSwipe – erste native iPhone-Version
+# FotoSwipe 1.1 – Löschliste und Vollbild-Zoom
 
 SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
 
@@ -7,7 +7,7 @@ SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
 | Wischen | Aktion |
 | --- | --- |
 | Links | Behalten und nächstes Foto anzeigen |
-| Rechts | Löschen über PhotoKit; iOS fragt nach Bestätigung |
+| Rechts | Zum Löschen vormerken und sofort das nächste Foto anzeigen |
 | Oben | Behalten und dem oben eingestellten Album hinzufügen |
 | Unten | Behalten und dem unten eingestellten Album hinzufügen |
 
@@ -17,9 +17,13 @@ Alben sind in Apple Fotos keine exklusiven Dateisystemordner. Ein Foto bleibt na
 
 Die App überträgt keine Fotos an einen eigenen Server und enthält keine Analyse- oder Werbedienste. Für iCloud-Fotos kann Apples Fotoverwaltung das Bild aus iCloud herunterladen. Beim Löschen gelten die Einstellungen deiner Apple-Fotomediathek, einschließlich möglicher Synchronisierung mit anderen Geräten. Wiederherstellung erfolgt über Apples „Zuletzt gelöscht“, soweit verfügbar, nicht über diese App.
 
+Ein Tippen auf die Bildmitte öffnet die Vollbildansicht mit Zwei-Finger-Zoom und Doppeltippen. Die Löschliste wird über das Papierkorb-Symbol geöffnet; dort lassen sich einzelne Fotos behalten oder alle verfügbaren Vormerkungen mit einer gemeinsamen iOS-Bestätigung löschen. Die Liste bleibt nach einem App-Neustart erhalten.
+
+**Bestehende Installation aktualisieren:** [Update-Anleitung für Version 1.1](UPDATE-1.1.md). FotoSwipe nicht deinstallieren; dieselbe App-Kennung und denselben Apple Account für die Installation über AltServer verwenden.
+
 ## Kostenlos mit Windows installieren
 
-Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Der erste Geräte-Build ist erfolgreich. Die Installation und der Funktionstest auf einem echten iPhone stehen noch aus.
+Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Version 1.1 wurde erfolgreich gebaut und die Fortschrittsübernahme automatisch geprüft. Das Update sowie die neuen Funktionen müssen anschließend auf dem eigenen iPhone getestet werden.
 
 ## Alternativ mit einem Mac starten
 
@@ -37,11 +41,11 @@ Ein kostenloses persönliches Xcode-Team kann zum Testen dienen. Signierung und 
 
 ## Prüfstatus
 
-Am 2. November 2026 wurde die App mit Xcode 16.4 und dem iPhoneOS-18.5-SDK für arm64 / iOS 17+ erfolgreich kompiliert und als unsignierte `FotoSwipe.ipa` verpackt. Der Build verwendet den kostenlosen Standard-Runner `macos-15-intel`, nachdem ein ARM-Runner wegen Kapazitätsproblemen nicht verfügbar war. Der fehlende PhotosUI-Import wurde beim ersten Kompilierungslauf korrigiert.
+Version 1.1 (Build 2) wurde am 3. November 2026 auf dem kostenlosen Standard-Runner `macos-15-intel` erfolgreich für iPhone kompiliert und als unsignierte IPA verpackt. Die App-Kennung `de.personal.FotoSwipe` ist unverändert.
 
-[Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41520623214) · [IPA-Artefakt herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41520623214/artifacts/13177762431) (bei GitHub anmelden, ZIP entpacken; dieses Artefakt wird am 9. November 2026 entfernt und kann durch einen neuen Build erneut erzeugt werden).
+[Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41709532313) · [FotoSwipe 1.1 herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41709532313/artifacts/13266827393) (bei GitHub anmelden, ZIP entpacken; dieses Artefakt wird am 10. November 2026 entfernt und kann durch einen neuen Build erneut erzeugt werden).
 
-Zusätzlich wurden Projektstruktur, XML-/Plist-Dateien, YAML und das IPA-Packen mit Testdaten geprüft. Simulator- und Gerätetests wurden noch nicht durchgeführt. Ein erfolgreicher Build bestätigt die Kompilierung, nicht das Laufzeitverhalten mit einer echten Fotomediathek.
+Die automatischen Swift-Prüfungen sind bestanden: Migration von 2.307 bereits bearbeiteten Fotos, Erhalt beider Albumkennungen, persistente und eindeutige Löschliste, Zurücknehmen einzelner Vormerkungen, Verarbeitung nur der tatsächlich gelöschten Einträge und Zurücksetzen bei erhaltener Löschliste. Die Speicherfelder der bestehenden Installation werden übernommen. Simulator- und Gerätetests der neuen Funktionen sowie das tatsächliche Update auf dem iPhone stehen noch aus.
 
 ## Geräteprüfung vor produktiver Verwendung
 
@@ -49,14 +53,17 @@ Zusätzlich wurden Projektstruktur, XML-/Plist-Dateien, YAML und das IPA-Packen 
 - Zugriff ablehnen: App zeigt Anleitung zu den Einstellungen; nach Freigabe werden Fotos geladen.
 - Eingeschränkten Zugriff erlauben: nur ausgewählte Fotos; Auswahl erweitern; keine Albumaktion möglich.
 - Links wischen: Foto bleibt in Apple Fotos und wird nach App-Neustart übersprungen.
-- Rechts wischen und den iOS-Dialog abbrechen: dasselbe Foto bleibt angezeigt.
-- Rechts wischen und bestätigen: Foto wird erst nach erfolgreicher PhotoKit-Änderung übersprungen.
+- Rechts wischen: Foto wird ohne Systemabfrage vorgemerkt; sofort erscheint das nächste. App neu starten: Vormerkung bleibt erhalten.
+- Löschliste öffnen, Bild prüfen und „Behalten“ wählen: nur dieses Foto verlässt die Liste und bleibt in Apple Fotos.
+- Gemeinsame Löschabfrage abbrechen: alle Vormerkungen bleiben erhalten.
+- Gemeinsam löschen und bestätigen: nur erfolgreich gelöschte zugängliche Fotos werden aus der Liste entfernt.
+- Bildmitte antippen: Vollbild öffnet sich. Pinch-Zoom, Ausschnitt verschieben, Doppeltippen und Schließen prüfen; dabei wird keine Sortierentscheidung gespeichert.
 - Zwei verschiedene Alben anlegen und auswählen; oben und unten wischen; Zuordnung in Apple Fotos kontrollieren.
 - Bereits vorhandene Albumzugehörigkeit sowie extern gelöschtes Zielalbum prüfen.
 - iCloud-Bild ohne lokale Kopie bei aktiver und fehlender Internetverbindung prüfen; bei Ladefehler erneut laden.
 - App während einer Systembestätigung in den Hintergrund bringen: danach weder doppelter Zugriff noch übersprungene Fotos.
 - Schnelle Mehrfachgesten, kleine Displays, große Schrift, VoiceOver und Live Photos prüfen.
-- Fortschritt zurücksetzen: Fotos und Alben bleiben unverändert, vorhandene Bilder werden erneut angeboten.
+- Fortschritt zurücksetzen: Fotos und Alben bleiben unverändert, abgeschlossene Bilder werden erneut angeboten; die Löschliste bleibt erhalten.
 
 Build ohne Signierung auf dem Mac:
 
