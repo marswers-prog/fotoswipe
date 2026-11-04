@@ -115,7 +115,7 @@ struct DeletionListView: View {
     }
 }
 
-private struct AssetPreview: View {
+struct AssetPreview: View {
     let asset: PHAsset
     let thumbnail: Bool
     @State private var image: UIImage?

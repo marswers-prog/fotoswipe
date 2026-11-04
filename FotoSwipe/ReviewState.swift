@@ -50,6 +50,12 @@ struct ReviewState: Codable {
         pending.removeAll { completed.contains($0) }
     }
 
+    mutating func recordDuplicateDeletion(deleted: Set<String>, kept: Set<String>) {
+        let handled = deleted.union(kept)
+        reviewed.formUnion(handled)
+        pending.removeAll { handled.contains($0) }
+    }
+
     mutating func resetReviewed() {
         reviewed.removeAll()
         // A reset must never silently empty a pending deletion queue.

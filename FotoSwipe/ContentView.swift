@@ -214,6 +214,13 @@ struct SettingsView: View {
                         Button("iPhone-Einstellungen öffnen") { store.openSettings() }
                     }
                 }
+                Section("Fotos aufräumen") {
+                    NavigationLink {
+                        ExactDuplicatesView(store: store)
+                    } label: {
+                        Label("Exakte Duplikate suchen", systemImage: "square.on.square")
+                    }.disabled(!store.accessible)
+                }
                 Section {
                     LabeledContent("Bereits bearbeitet", value: "\(store.reviewedCount)")
                     Button("Alle vorhandenen Fotos erneut durchsehen", role: .destructive) { confirmRestart = true }
@@ -236,7 +243,7 @@ struct SettingsView: View {
                 }
             }
             .disabled(store.busy)
-            .navigationTitle("Deine Alben")
+            .navigationTitle("Einstellungen")
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() }.disabled(store.busy) } }
             .confirmationDialog("Merkliste zurücksetzen?", isPresented: $confirmRestart, titleVisibility: .visible) {
                 Button("Erneut durchsehen", role: .destructive) { store.restart() }

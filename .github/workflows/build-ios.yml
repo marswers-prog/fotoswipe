@@ -9,6 +9,7 @@ on:
       - 'FotoSwipe.xcodeproj/**'
       - 'scripts/**'
       - 'Tests/**'
+      - 'DuplicateTests/**'
       - '.github/workflows/build-ios.yml'
 
 permissions:
@@ -38,6 +39,11 @@ jobs:
           mkdir -p build
           swiftc FotoSwipe/ReviewState.swift Tests/main.swift -o build/review-state-tests
           build/review-state-tests
+
+      - name: Exakte Duplikate und Upgrade von Version 1.1 testen
+        run: |
+          swiftc FotoSwipe/ReviewState.swift FotoSwipe/DuplicateCore.swift DuplicateTests/main.swift -o build/duplicate-tests
+          build/duplicate-tests
 
       - name: iPhone-App bauen und IPA packen
         run: bash scripts/build-ipa.sh

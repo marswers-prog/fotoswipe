@@ -18,6 +18,7 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
     @Published var albums: [AlbumChoice] = []
     @Published var remaining = 0
     @Published var busy = false
+    @Published private(set) var libraryRevision = 0
     @Published var loading = false
     @Published var loadFailed = false
     @Published var message: String?
@@ -62,7 +63,11 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
     }
 
     nonisolated func photoLibraryDidChange(_ changeInstance: PHChange) {
-        Task { @MainActor [weak self] in self?.refresh() }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.libraryRevision += 1
+            self.refresh()
+        }
     }
 
     func requestAccess() {
@@ -251,6 +256,40 @@ final class PhotoStore: NSObject, ObservableObject, PHPhotoLibraryChangeObserver
             }
         }
         endOperation()
+    }
+
+    func deleteExactDuplicates(_ plan: DuplicateDeletionPlan, expectedRevision: Int,
+                               validate: () async throws -> [PHAsset]) async -> Bool {
+        guard !busy, accessible, !plan.deleteIDs.isEmpty,
+              plan.deleteIDs.isDisjoint(with: plan.keepIDs) else { return false }
+        busy = true
+        defer { endOperation() }
+        do {
+            // Re-read and compare the complete files immediately before requesting deletion.
+            let assets = try await validate()
+            try Task.checkCancellation()
+            let stillKept = PHAsset.fetchAssets(withLocalIdentifiers: Array(plan.keepIDs), options: nil)
+            guard libraryRevision == expectedRevision,
+                  Set(assets.map(\.localIdentifier)) == plan.deleteIDs,
+                  stillKept.count == plan.keepIDs.count else { throw DuplicateIssue.changed }
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.deleteAssets(assets as NSArray)
+            }
+            var changed = reviewState
+            changed.recordDuplicateDeletion(deleted: plan.deleteIDs, kept: plan.keepIDs)
+            let saved = saveState(changed)
+            status = "\(assets.count) doppelte Fotos gelöscht. Pro Gruppe bleibt dein gewähltes Foto erhalten."
+            return saved
+        } catch {
+            let ns = error as NSError
+            if error is CancellationError || (ns.domain == PHPhotosErrorDomain && ns.code == PHPhotosError.Code.userCancelled.rawValue) {
+                status = "Löschen abgebrochen – es wurden keine Duplikate gelöscht."
+            } else {
+                status = "Duplikate wurden nicht gelöscht. Bitte Auswahl erneut prüfen."
+                message = error.localizedDescription
+            }
+            return false
+        }
     }
 
     private func endOperation() {
