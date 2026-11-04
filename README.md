@@ -1,6 +1,14 @@
-# FotoSwipe 1.1 – Löschliste und Vollbild-Zoom
+# FotoSwipe 1.2 – exakte Duplikate prüfen
 
 SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
+
+## Neues in Version 1.2
+
+Unter **Einstellungen → Fotos aufräumen → Exakte Duplikate suchen** lassen sich vollständige Fotodateien einschließlich Live-Photo- und Bearbeitungsressourcen vergleichen. SHA-256 findet Kandidaten; ein zusätzlicher Bytevergleich bestätigt die Gleichheit. Pro ausgewählter Gruppe bleibt ein ausdrücklich gewähltes Exemplar erhalten. Vor dem Löschen wird erneut geprüft und iOS fragt nach Bestätigung. Die bisherige Merkliste, Löschliste und Albumkonfiguration werden übernommen.
+
+[Update-Anleitung für Version 1.2](UPDATE-1.2.md) · [Aktueller Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41863090797)
+
+**Build-Status:** Der Quellcode und die automatischen Prüfungen sind vorbereitet. GitHub hat bislang keinen freien Standard-Mac zugeteilt. Die neuen Swift-Prüfungen und der iPhone-Build sind daher noch nicht ausgeführt; eine geprüfte IPA für Version 1.2 liegt noch nicht vor. Nach einem erfolgreichen Lauf steht die Datei unter dem Artefakt **FotoSwipe-iPhone** bereit. Bestehende Installation nicht löschen.
 
 ## Bedienung
 
@@ -19,7 +27,7 @@ Die App überträgt keine Fotos an einen eigenen Server und enthält keine Analy
 
 Ein Tippen auf die Bildmitte öffnet die Vollbildansicht mit Zwei-Finger-Zoom und Doppeltippen. Die Löschliste wird über das Papierkorb-Symbol geöffnet; dort lassen sich einzelne Fotos behalten oder alle verfügbaren Vormerkungen mit einer gemeinsamen iOS-Bestätigung löschen. Die Liste bleibt nach einem App-Neustart erhalten.
 
-**Bestehende Installation aktualisieren:** [Update-Anleitung für Version 1.1](UPDATE-1.1.md). FotoSwipe nicht deinstallieren; dieselbe App-Kennung und denselben Apple Account für die Installation über AltServer verwenden.
+**Bestehende Installation aktualisieren:** [Update-Anleitung für Version 1.2](UPDATE-1.2.md). FotoSwipe nicht deinstallieren; dieselbe App-Kennung und denselben Apple Account für die Installation über AltServer verwenden.
 
 ## Kostenlos mit Windows installieren
 
@@ -39,7 +47,7 @@ Voraussetzungen: Mac mit Xcode und installierter iOS-Plattformunterstützung, Ap
 
 Ein kostenloses persönliches Xcode-Team kann zum Testen dienen. Signierung und Gültigkeitsdauer hängen vom Apple Account ab; ein erneuter Start über Xcode kann erforderlich sein. Dies ist noch keine App-Store- oder TestFlight-Veröffentlichung und keine fertig signierte IPA-Datei. Für eine spätere Verteilung sind separate Apple-Signierung und gegebenenfalls weitere Veröffentlichungsschritte nötig.
 
-## Prüfstatus
+## Prüfstatus der bisherigen Version 1.1
 
 Version 1.1 (Build 2) wurde am 3. November 2026 auf dem kostenlosen Standard-Runner `macos-15-intel` erfolgreich für iPhone kompiliert und als unsignierte IPA verpackt. Die App-Kennung `de.personal.FotoSwipe` ist unverändert.
 
