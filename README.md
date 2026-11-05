@@ -6,9 +6,11 @@ SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
 
 Unter **Einstellungen → Fotos aufräumen → Exakte Duplikate suchen** lassen sich vollständige Fotodateien einschließlich Live-Photo- und Bearbeitungsressourcen vergleichen. SHA-256 findet Kandidaten; ein zusätzlicher Bytevergleich bestätigt die Gleichheit. Pro ausgewählter Gruppe bleibt ein ausdrücklich gewähltes Exemplar erhalten. Vor dem Löschen wird erneut geprüft und iOS fragt nach Bestätigung. Die bisherige Merkliste, Löschliste und Albumkonfiguration werden übernommen.
 
-[Update-Anleitung für Version 1.2](UPDATE-1.2.md) · [Aktueller Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41863090797)
+[Update-Anleitung für Version 1.2](UPDATE-1.2.md) · [Aktueller Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41970804630)
 
-**Build-Status:** Der Quellcode und die automatischen Prüfungen sind vorbereitet. GitHub hat bislang keinen freien Standard-Mac zugeteilt. Die neuen Swift-Prüfungen und der iPhone-Build sind daher noch nicht ausgeführt; eine geprüfte IPA für Version 1.2 liegt noch nicht vor. Nach einem erfolgreichen Lauf steht die Datei unter dem Artefakt **FotoSwipe-iPhone** bereit. Bestehende Installation nicht löschen.
+**Build-Status:** Version 1.2 (Build 3) wurde am 5. November 2026 auf `macos-15-intel` erfolgreich für iPhone gebaut. Beide Swift-Testgruppen sind bestanden, einschließlich der Migration von 2.307 alten Entscheidungen samt bestehender Löschliste, der Albumkennungen, der vollständigen Dateivergleiche und der Löschpläne mit erhaltenem Exemplar. Die Suche in einer echten Mediathek und das Update auf dem eigenen iPhone müssen am Gerät geprüft werden.
+
+[FotoSwipe 1.2 herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41970804630/artifacts/13389229182) — bei GitHub anmelden, ZIP entpacken und die neue `FotoSwipe.ipa` über dieselbe AltServer-Installation mit demselben Apple Account über die bestehende App installieren. **FotoSwipe nicht vorher löschen.** Dieses Artefakt wird am 12. November 2026 entfernt; ein neuer erfolgreicher Build erzeugt es erneut.
 
 ## Bedienung
 
@@ -31,7 +33,7 @@ Ein Tippen auf die Bildmitte öffnet die Vollbildansicht mit Zwei-Finger-Zoom un
 
 ## Kostenlos mit Windows installieren
 
-Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Version 1.1 wurde erfolgreich gebaut und die Fortschrittsübernahme automatisch geprüft. Das Update sowie die neuen Funktionen müssen anschließend auf dem eigenen iPhone getestet werden.
+Die Anleitung [START-WINDOWS.md](START-WINDOWS.md) beschreibt den Weg über ein öffentliches GitHub-Projekt, den mitgelieferten automatischen Build und AltStore Classic. Dafür ist kein eigener Mac und keine kostenpflichtige Apple-Developer-Mitgliedschaft vorgesehen. Für diesen Weg muss die kostenlose Signierung regelmäßig erneuert werden. Der Workflow erstellt nach erfolgreicher Kompilierung `FotoSwipe.ipa`; die persönliche Signierung erfolgt anschließend lokal über AltStore. Version 1.2 wurde erfolgreich gebaut und die Fortschrittsübernahme sowie die Duplikaterkennung automatisch geprüft. Das Update sowie die neuen Funktionen müssen anschließend auf dem eigenen iPhone getestet werden.
 
 ## Alternativ mit einem Mac starten
 

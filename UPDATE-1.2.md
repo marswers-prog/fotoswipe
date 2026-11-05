@@ -1,5 +1,7 @@
 # FotoSwipe 1.2 – exakte Duplikate finden
 
+[FotoSwipe 1.2 herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41970804630/artifacts/13389229182) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/41970804630). Bei GitHub anmelden, die ZIP entpacken und `FotoSwipe.ipa` entnehmen. Download verfügbar bis zum 12. November 2026; danach bei Bedarf erneut bauen.
+
 ## Bedienung
 
 1. FotoSwipe öffnen und oben rechts die Einstellungen wählen.
@@ -29,4 +31,4 @@ Danach zuerst Fortschrittszähler, Zielalben und die bestehende Löschliste kont
 
 ## Prüfung
 
-Die automatischen Prüfungen decken die Migration von 2.307 alten Entscheidungen mit bestehender Löschliste, den Erhalt der Albumkennungen, unterschiedliche Live-Photo- und Bearbeitungsressourcen, blockweises Hashen, den abschließenden Bytevergleich und ungültige Löschpläne ab. Zusätzlich läuft der iPhone-Build. Die Suche in einer echten Mediathek, das Abbrechen eines iOS-Löschdialogs und das Update auf dem eigenen iPhone müssen anschließend am Gerät geprüft werden.
+Am 5. November 2026 sind beide automatischen Swift-Testgruppen und der iPhone-Build erfolgreich abgeschlossen worden. Die automatischen Prüfungen decken die Migration von 2.307 alten Entscheidungen mit bestehender Löschliste, den Erhalt der Albumkennungen, unterschiedliche Live-Photo- und Bearbeitungsressourcen, blockweises Hashen, den abschließenden Bytevergleich und ungültige Löschpläne ab. Die gebaute Version ist 1.2 (Build 3). Die Suche in einer echten Mediathek, das Abbrechen eines iOS-Löschdialogs und das Update auf dem eigenen iPhone müssen anschließend am Gerät geprüft werden.

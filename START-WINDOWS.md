@@ -2,7 +2,7 @@
 
 Du brauchst deinen Windows-PC, dein iPhone (iOS 17 oder neuer), ein USB-Kabel, einen kostenlosen GitHub-Account und einen kostenlosen Apple Account. Eine kostenpflichtige Apple-Developer-Mitgliedschaft oder ein eigener Mac ist für diesen Weg nicht vorgesehen. Die App wird nicht im App Store veröffentlicht.
 
-Für dieses Repository wurde bereits eine IPA erfolgreich gebaut: [FotoSwipe-iPhone herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41709532313/artifacts/13266827393). Bei GitHub anmelden, die heruntergeladene ZIP entpacken und `FotoSwipe.ipa` entnehmen. Danach kannst du direkt bei Abschnitt 2 fortfahren. Dieses Artefakt wird am 10. November 2026 entfernt; über Abschnitt 1 lässt sich bei Bedarf eine neue IPA bauen. Die persönliche Signierung und der Funktionstest auf deinem iPhone stehen noch aus. Wenn FotoSwipe schon installiert ist, verwende die [Update-Anleitung](UPDATE-1.1.md), damit der bisherige Fortschritt erhalten bleibt.
+Für dieses Repository wurde bereits eine IPA erfolgreich gebaut: [FotoSwipe-iPhone herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/41970804630/artifacts/13389229182). Bei GitHub anmelden, die heruntergeladene ZIP entpacken und `FotoSwipe.ipa` entnehmen. Danach kannst du direkt bei Abschnitt 2 fortfahren. Dieses Artefakt wird am 12. November 2026 entfernt; über Abschnitt 1 lässt sich bei Bedarf eine neue IPA bauen. Die persönliche Signierung und der Funktionstest auf deinem iPhone stehen noch aus. Wenn FotoSwipe schon installiert ist, verwende die [Update-Anleitung](UPDATE-1.2.md), damit der bisherige Fortschritt erhalten bleibt.
 
 ## 1. Auf GitHub bauen
 
