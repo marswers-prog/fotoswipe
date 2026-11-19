@@ -46,15 +46,7 @@ jobs:
         run: python Windows/build_assets.py
 
       - name: Eigenstaendige EXE erstellen
-        run: >-
-          python -m PyInstaller --noconfirm --clean --onefile --windowed
-          --name FotoSwipe --icon Windows/build/app.ico
-          --add-data "Windows/build/app.ico;assets"
-          --collect-all pillow_heif
-          --hidden-import send2trash.win.modern --hidden-import win32timezone
-          --paths Windows --distpath Windows/dist
-          --workpath Windows/build/pyinstaller --specpath Windows/build
-          Windows/main.py
+        run: python Windows/build_exe.py
 
       - name: Gepacktes Windows-Programm pruefen
         shell: pwsh

@@ -132,8 +132,10 @@ class PhotoApp:
         self.busy = False
         self.events = queue.SimpleQueue()
         root.title('FotoSwipe für Windows')
-        root.geometry('1180x820')
-        root.minsize(850, 620)
+        width = max(820, min(1180, root.winfo_screenwidth() - 70))
+        height = max(560, min(820, root.winfo_screenheight() - 110))
+        root.geometry(f'{width}x{height}')
+        root.minsize(820, 560)
         root.configure(bg=BG)
         root.protocol('WM_DELETE_WINDOW', self.close)
         self._style()
@@ -306,6 +308,9 @@ class PhotoApp:
             self.root.bind('<KeyRelease-' + event.keysym + '>', lambda e: setattr(self, '_key_down', None))
             self.action(KEY_ACTIONS[event.keysym])
             return 'break'
+        if event.keysym == 'F5':
+            self.refresh()
+            return 'break'
         if event.keysym == 'Return':
             self.open_zoom()
             return 'break'
@@ -336,8 +341,11 @@ class PhotoApp:
     def modal(self, title, size='1000x720'):
         win = tk.Toplevel(self.root)
         win.title(title)
-        win.geometry(size)
-        win.minsize(760, 520)
+        width, height = map(int, size.split('x'))
+        width = max(760, min(width, win.winfo_screenwidth() - 90))
+        height = max(500, min(height, win.winfo_screenheight() - 130))
+        win.geometry(f'{width}x{height}')
+        win.minsize(760, 500)
         win.configure(bg=BG)
         win.transient(self.root)
         win.grab_set()

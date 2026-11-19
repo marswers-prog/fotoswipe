@@ -14,6 +14,7 @@ Rechts →  Bild zum Löschen vormerken, nächstes Bild anzeigen.
 Oben   ↑  Bild in den oberen Zielordner verschieben.
 Unten  ↓  Bild in den unteren Zielordner verschieben.
 Enter oder Doppelklick auf das Bild: Vollbild/Zoom.
+F5: Bilderordner neu einlesen.
 Im Vollbild: Mausrad zoomt, Ziehen verschiebt den Ausschnitt,
 Doppelklick vergrößert/setzt zurück, Esc schließt die Vollbildansicht.
 Die Randbeschriftungen lassen sich auch mit der Maus anklicken.
