@@ -1,0 +1,16 @@
+FotoSwipe enthält für die eigenständige Windows-Ausgabe Open-Source-Komponenten.
+Die zugehörigen mitgelieferten Lizenztexte stehen im Unterordner Lizenzen.
+
+Python / tkinter (Python Software Foundation, Tcl/Tk)
+https://www.python.org/
+https://www.tcl.tk/
+Pillow (HPND und enthaltene Bibliothekslizenzen)
+https://python-pillow.org/
+pillow-heif und enthaltene libheif-/Codec-Komponenten
+https://github.com/bigcat88/pillow_heif
+Send2Trash (BSD)
+https://github.com/arsenetar/send2trash
+pywin32 (PSF-artige Lizenz)
+https://github.com/mhammond/pywin32
+PyInstaller (GPL mit Ausnahme für gebündelte Programme)
+https://pyinstaller.org/

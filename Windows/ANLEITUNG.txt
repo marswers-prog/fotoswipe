@@ -1,0 +1,74 @@
+FotoSwipe für Windows 10 (64 Bit) – Version 1.0
+
+START
+1. Die heruntergeladene ZIP vollständig entpacken.
+2. FotoSwipe.exe mit Doppelklick öffnen. Python muss nicht installiert sein.
+3. „Bilderordner wählen“ anklicken und den gewünschten Ordner auswählen.
+4. Unter „Einstellungen“ zwei unterschiedliche Zielordner für oben und unten
+   auswählen. Im Ordnerdialog kannst du auch neue Ordner anlegen und benennen.
+5. Das Foto ansehen und mit den vier Pfeiltasten sortieren.
+
+TASTEN
+Links  ←  Bild behalten, nächstes Bild anzeigen.
+Rechts →  Bild zum Löschen vormerken, nächstes Bild anzeigen.
+Oben   ↑  Bild in den oberen Zielordner verschieben.
+Unten  ↓  Bild in den unteren Zielordner verschieben.
+Enter oder Doppelklick auf das Bild: Vollbild/Zoom.
+Im Vollbild: Mausrad zoomt, Ziehen verschiebt den Ausschnitt,
+Doppelklick vergrößert/setzt zurück, Esc schließt die Vollbildansicht.
+Die Randbeschriftungen lassen sich auch mit der Maus anklicken.
+
+LÖSCHEN
+Rechts allein löscht noch keine Datei. Über „Löschliste“ kannst du vorgemerkte
+Bilder prüfen, vergrößern und mit „Auswahl behalten“ wieder herausnehmen.
+„Alle vorgemerkten Bilder in Papierkorb“ fragt einmal nach und verschiebt sie
+anschließend in den Windows-Papierkorb. Von dort lassen sie sich mit den
+normalen Windows-Funktionen wiederherstellen, solange der Papierkorb sie enthält.
+Geänderte, gesperrte oder nicht erreichbare Dateien bleiben vorgemerkt.
+Für Netzlaufwerke und andere nicht unterstützte Datenträger wird keine
+Papierkorb-Aktion ausgeführt. Es gibt keinen automatischen Rückfall auf
+endgültiges Löschen.
+
+ECHTE WINDOWS-ORDNER
+Oben/unten verschiebt die Bilddatei tatsächlich aus dem Bilderordner in den
+gewählten Zielordner. Bei gleichen Dateinamen wird eine freie Nummer angehängt,
+z.B. „Foto (1).jpg“. Es wird keine vorhandene Datei überschrieben.
+Unterordner werden nur durchsucht, wenn du das in den Einstellungen aktivierst.
+Zielordner innerhalb des Bilderordners werden dabei ausgelassen.
+Es werden einzelne Bilddateien verarbeitet. Separate Live-Photo-Videos (.MOV),
+Bearbeitungsdateien (.AAE/.XMP) und andere Begleitdateien werden nicht automatisch
+mitverschoben. GIF und mehrseitige TIFF-Dateien werden mit ihrem ersten Bild
+angezeigt, aber als vollständige Datei verarbeitet.
+
+DUPLIKATE
+Unter Einstellungen → Exakte Duplikate suchen kannst du den gewählten
+Bilderordner auf vollständig gleiche Dateien prüfen. Auch bereits bearbeitete
+Bilder werden dabei berücksichtigt. Erst werden Dateigröße und SHA-256 verglichen,
+anschließend die vollständigen Dateiinhalte. Ähnliche Motive, andere Kompression
+und andere Bildmetadaten gelten nicht als exakt gleich.
+Keine Gruppe ist vorab ausgewählt. Wähle eine Gruppe und das Exemplar, das
+bleiben soll. „Kopien zur Löschliste“ prüft die Dateien erneut und merkt nur die
+zusätzlichen Kopien vor. Das zu behaltende Exemplar wird dabei aus einer eventuell
+bestehenden Löschliste genommen. Tatsächlich gelöscht wird erst über die Löschliste.
+
+FORTSCHRITT UND UPDATES
+Der Fortschritt wird getrennt für jeden Bilderordner gespeichert.
+Schließen und erneutes Öffnen erhält die Merkliste, Zielordner und Löschliste.
+Ersetzt du später nur die Programmdatei durch ein Update, bleibt dieser Zustand
+in deinem Windows-Benutzerprofil erhalten:
+%LOCALAPPDATA%\FotoSwipeWindows
+Die Windows-Version hat ihre eigene Merkliste; sie synchronisiert diese nicht
+mit der iPhone-App. „Fortschritt zurücksetzen“ betrifft nur den gewählten
+Windows-Bilderordner und erhält die dortige Löschliste.
+Ein verändertes Bild kann erneut angeboten werden. Wenn ein Bild nicht geladen
+werden kann, überspringe es vorläufig. Beim nächsten Start erscheint es wieder.
+
+FORMATE
+JPEG, PNG, WebP, BMP, GIF, TIFF, HEIC/HEIF und AVIF, soweit die Datei lesbar ist.
+Das Programm lädt keine Bilder auf einen eigenen Server und braucht für die
+lokalen Funktionen keine Internetverbindung. Bei Cloud- oder Netzwerkordnern
+kann das Öffnen einer Datei jedoch einen Download durch deinen Speicheranbieter
+auslösen.
+
+Das Programm benötigt weder AltStore noch eine wöchentliche Freigabe.
+Bei Problemen liegt ein lokales Fehlerprotokoll unter dem obigen Datenordner.
