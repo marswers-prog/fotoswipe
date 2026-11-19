@@ -2,6 +2,12 @@
 
 SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
 
+## Windows-Programm
+
+FotoSwipe gibt es zusätzlich als eigenständiges Tool für **Windows 10 mit 64 Bit**: [Windows-Download](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137/artifacts/14579265459) · [Anleitung und Quellcode](Windows/README.md).
+
+Bilderordner und zwei Zielordner wählen, dann mit den vier Pfeiltasten sortieren. Rechts merkt für die gemeinsame Papierkorb-Aktion vor; oben/unten verschiebt in echte Ordner. Vollbild/Zoom, exakte Duplikate und der getrennt je Bilderordner gespeicherte Fortschritt sind enthalten. Die ZIP entpacken und `FotoSwipe.exe` starten; Python oder AltStore müssen dafür nicht installiert werden. 24 automatische Prüfungen und der Starttest der gepackten EXE sind bestanden. [Build ansehen](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137).
+
 ## Neues in Version 1.2
 
 Unter **Einstellungen → Fotos aufräumen → Exakte Duplikate suchen** lassen sich vollständige Fotodateien einschließlich Live-Photo- und Bearbeitungsressourcen vergleichen. SHA-256 findet Kandidaten; ein zusätzlicher Bytevergleich bestätigt die Gleichheit. Pro ausgewählter Gruppe bleibt ein ausdrücklich gewähltes Exemplar erhalten. Vor dem Löschen wird erneut geprüft und iOS fragt nach Bestätigung. Die bisherige Merkliste, Löschliste und Albumkonfiguration werden übernommen.

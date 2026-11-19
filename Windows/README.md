@@ -10,7 +10,9 @@ Python und die benötigten Bilddecoder; Python muss nicht separat installiert we
 - Exakte Dateiduplikate mit SHA-256-Vorauswahl und abschließendem Bytevergleich.
 - JPEG, PNG, WebP, BMP, GIF, TIFF, HEIC/HEIF und AVIF über Pillow / pillow-heif.
 
-[Bedienungsanleitung](ANLEITUNG.txt)
+[Windows-Programm herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137/artifacts/14579265459) · [Bedienungsanleitung](ANLEITUNG.txt) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137)
+
+Bei GitHub anmelden, ZIP vollständig entpacken und `FotoSwipe.exe` starten. Unter Einstellungen zwei Zielordner wählen. Die Datei benötigt keine wöchentliche Freigabe. Der Download ist bis zum 19. Dezember 2026 verfügbar; eine bereits heruntergeladene EXE bleibt nutzbar.
 
 ## Bauen und prüfen
 
@@ -45,6 +47,4 @@ Die Merkliste der iPhone-App bleibt eigenständig.
 
 ## Prüfstatus
 
-Die lokalen Kernprüfungen sind bestanden. Windows-Build und Test der gepackten
-EXE stehen vor dem ersten erfolgreichen Workflow noch aus. Der tatsächliche
-Start auf dem eigenen Windows-10-PC muss anschließend geprüft werden.
+Am 19. November 2026 sind alle 24 automatischen Prüfungen auf Windows erfolgreich durchgelaufen, einschließlich HEIC-Dekodierung, 2.307 gespeicherter Entscheidungen, Fehlerfällen beim Verschieben, Namenskollisionen, Wiederaufnahme nach Unterbrechungen und dem Erhalt des gewählten Duplikat-Exemplars. Die fertige EXE hat außerdem den Desktop-Starttest mit allen vier Pfeiltasten, den Nebenfenstern, Zoom-Canvas und dem nativen Windows-Papierkorb bestanden. Gebaut und geprüft wurde im Windows-2022-Buildsystem. Der erste Start auf deinem eigenen Windows-10-PC steht noch aus.
