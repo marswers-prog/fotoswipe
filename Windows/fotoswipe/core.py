@@ -116,6 +116,7 @@ class PhotoLibrary:
             CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS reviewed(root TEXT NOT NULL, path TEXT NOT NULL, size INTEGER NOT NULL, mtime INTEGER NOT NULL, PRIMARY KEY(root,path,size,mtime));
             CREATE TABLE IF NOT EXISTS pending(root TEXT NOT NULL, path TEXT NOT NULL, size INTEGER NOT NULL, mtime INTEGER NOT NULL, sha TEXT NOT NULL, PRIMARY KEY(root,path));
+            CREATE TABLE IF NOT EXISTS duplicate_guards(root TEXT NOT NULL, path TEXT NOT NULL, keeper TEXT NOT NULL, PRIMARY KEY(root,path));
             CREATE TABLE IF NOT EXISTS operations(id TEXT PRIMARY KEY, root TEXT NOT NULL, kind TEXT NOT NULL, source TEXT NOT NULL, destination TEXT NOT NULL, staging TEXT NOT NULL, size INTEGER NOT NULL, mtime INTEGER NOT NULL, sha TEXT NOT NULL, phase TEXT NOT NULL);
         ''')
         self.recycler = recycler or windows_recycle
@@ -214,14 +215,18 @@ class PhotoLibrary:
         with self.transaction():
             self._review(item)
             self.db.execute('DELETE FROM pending WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
+            self.db.execute('DELETE FROM duplicate_guards WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
 
     def stage(self, item):
         validate(item)
         with self.transaction():
             self._stage(item)
 
-    def _stage(self, item):
+    def _stage(self, item, keeper=None):
         self.db.execute('INSERT OR REPLACE INTO pending VALUES(?,?,?,?,?)', (normalized(item.root), normalized(item.path), item.size, item.mtime_ns, item.sha256))
+        self.db.execute('DELETE FROM duplicate_guards WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
+        if keeper is not None:
+            self.db.execute('INSERT INTO duplicate_guards VALUES(?,?,?)', (normalized(item.root), normalized(item.path), json.dumps(asdict(keeper))))
 
     def pending(self, root):
         root = normalized(root)
@@ -233,6 +238,7 @@ class PhotoLibrary:
         with self.transaction():
             self._review(item)
             self.db.execute('DELETE FROM pending WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
+            self.db.execute('DELETE FROM duplicate_guards WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
 
     def reset(self, root):
         with self.transaction():
@@ -247,6 +253,7 @@ class PhotoLibrary:
         with self.transaction():
             self._review(item)
             self.db.execute('DELETE FROM pending WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
+            self.db.execute('DELETE FROM duplicate_guards WHERE root=? AND path=?', (normalized(item.root), normalized(item.path)))
             self.db.execute('DELETE FROM operations WHERE id=?', (op_id,))
 
     def _clear(self, op_id):
@@ -347,6 +354,13 @@ class PhotoLibrary:
                 if not row or (row['size'], row['mtime'], row['sha']) != (item.size, item.mtime_ns, item.sha256):
                     raise PhotoError('Die Vormerkung ist nicht mehr aktuell.')
                 validate(item)
+                with self.lock:
+                    guard = self.db.execute('SELECT keeper FROM duplicate_guards WHERE root=? AND path=?', (normalized(item.root), normalized(item.path))).fetchone()
+                if guard:
+                    keeper = Snapshot(**json.loads(guard['keeper']))
+                    validate(keeper)
+                    if not equal_files(item.path, keeper.path):
+                        raise PhotoError('Das zu behaltende Duplikat ist nicht mehr identisch. Bitte erneut prüfen.')
                 self._operation(op_id, item, 'recycle')
                 self.recycler(item.path)
                 if Path(item.path).exists():
@@ -400,6 +414,7 @@ class PhotoLibrary:
     def stage_duplicates(self, choices):
         # Revalidate every group, including each keeper, before storing choices.
         staged, kept, seen = [], [], set()
+        guards = {}
         for members, keeper_index in choices:
             if len(members) < 2 or not 0 <= keeper_index < len(members):
                 raise PhotoError('Ungültige Duplikat-Auswahl.')
@@ -414,13 +429,17 @@ class PhotoLibrary:
                 if not equal_files(keeper.path, member.path):
                     raise PhotoError('Die Dateien sind nicht mehr identisch. Bitte erneut suchen.')
             kept.append(keeper)
-            staged.extend(m for i, m in enumerate(members) if i != keeper_index)
+            for i, member in enumerate(members):
+                if i != keeper_index:
+                    staged.append(member)
+                    guards[member.path] = keeper
         with self.transaction():
             for member in staged:
-                self._stage(member)
+                self._stage(member, guards[member.path])
             for keeper in kept:
                 self._review(keeper)
                 self.db.execute('DELETE FROM pending WHERE root=? AND path=?', (normalized(keeper.root), normalized(keeper.path)))
+                self.db.execute('DELETE FROM duplicate_guards WHERE root=? AND path=?', (normalized(keeper.root), normalized(keeper.path)))
         return len(staged)
 
 

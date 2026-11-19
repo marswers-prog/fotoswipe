@@ -50,7 +50,9 @@ und andere Bildmetadaten gelten nicht als exakt gleich.
 Keine Gruppe ist vorab ausgewählt. Wähle eine Gruppe und das Exemplar, das
 bleiben soll. „Kopien zur Löschliste“ prüft die Dateien erneut und merkt nur die
 zusätzlichen Kopien vor. Das zu behaltende Exemplar wird dabei aus einer eventuell
-bestehenden Löschliste genommen. Tatsächlich gelöscht wird erst über die Löschliste.
+bestehenden Löschliste genommen. Tatsächlich gelöscht wird erst über die Löschliste. Vor dieser Papierkorb-Aktion
+wird auch das zu behaltende Exemplar erneut geprüft. Fehlt es oder wurde es
+verändert, bleibt die zusätzliche Kopie vorgemerkt.
 
 FORTSCHRITT UND UPDATES
 Der Fortschritt wird getrennt für jeden Bilderordner gespeichert.

@@ -199,6 +199,27 @@ class CoreTests(unittest.TestCase):
         with self.assertRaises(PhotoError): self.lib.stage_duplicates([([a, b], 0)])
         self.assertEqual(self.lib.counts(self.source), (0, 0))
 
+    def test_duplicate_keeper_is_checked_again_before_recycling(self):
+        a, b = self.photo('a.jpg'), self.photo('b.jpg')
+        self.lib.stage_duplicates([([a, b], 0)])
+        self.reload()
+        Path(a.path).unlink()
+        succeeded, errors = self.lib.recycle(self.lib.pending(self.source))
+        self.assertEqual(succeeded, [])
+        self.assertEqual(len(errors), 1)
+        self.assertTrue(Path(b.path).exists())
+        self.assertEqual(len(self.lib.pending(self.source)), 1)
+
+    def test_duplicate_cleanup_recycles_only_extra_copy(self):
+        a, b = self.photo('a.jpg'), self.photo('b.jpg')
+        self.lib.stage_duplicates([([a, b], 1)])
+        self.reload()
+        succeeded, errors = self.lib.recycle(self.lib.pending(self.source))
+        self.assertEqual(len(succeeded), 1)
+        self.assertEqual(errors, [])
+        self.assertTrue(Path(b.path).exists())
+        self.assertFalse(Path(a.path).exists())
+
     def test_cancellation_changes_nothing(self):
         self.photo('a.jpg'); self.photo('b.jpg')
         stop = threading.Event(); stop.set()
