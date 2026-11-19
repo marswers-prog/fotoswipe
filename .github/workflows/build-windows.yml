@@ -77,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: FotoSwipe-Windows-10-64bit
-          path: Windows/package/FotoSwipe-Windows.zip
+          path: Windows/package/FotoSwipe-Windows
           if-no-files-found: error
           retention-days: 30
 
