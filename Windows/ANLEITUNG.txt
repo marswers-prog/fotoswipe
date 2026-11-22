@@ -1,4 +1,4 @@
-FotoSwipe für Windows 10 (64 Bit) – Version 1.0
+FotoSwipe für Windows 10 (64 Bit) – Version 1.0.1
 
 START
 1. Die heruntergeladene ZIP vollständig entpacken.
@@ -18,6 +18,8 @@ F5: Bilderordner neu einlesen.
 Im Vollbild: Mausrad zoomt, Ziehen verschiebt den Ausschnitt,
 Doppelklick vergrößert/setzt zurück, Esc schließt die Vollbildansicht.
 Die Randbeschriftungen lassen sich auch mit der Maus anklicken.
+Die Pfeiltasten funktionieren auch mit eingeschalteter Num-Taste (Num Lock).
+Strg oder Alt zusammen mit einer Pfeiltaste führt keine Sortieraktion aus.
 
 LÖSCHEN
 Rechts allein löscht noch keine Datei. Über „Löschliste“ kannst du vorgemerkte

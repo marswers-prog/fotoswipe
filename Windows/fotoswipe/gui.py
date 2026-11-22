@@ -10,6 +10,7 @@ from tkinter import filedialog, messagebox, ttk
 from PIL import Image, ImageTk
 from .core import KEY_ACTIONS, Cancelled, PhotoError, PhotoLibrary
 from .imaging import load_photo, preview
+from .keyboard import blocks_shortcut
 
 BG = '#0d1419'
 PANEL = '#17252d'
@@ -140,7 +141,12 @@ class PhotoApp:
         root.protocol('WM_DELETE_WINDOW', self.close)
         self._style()
         self._build()
+        self.window_system = root.tk.call('tk', 'windowingsystem')
+        self._key_down = None
         root.bind('<KeyPress>', self.key)
+        root.bind('<KeyRelease>', self.key_release)
+        root.bind('<FocusOut>', lambda event: setattr(self, '_key_down', None))
+        self.canvas.bind('<Button-1>', lambda event: self.canvas.focus_set())
         root.after(40, self._drain)
         previous = library.last_root()
         if previous and Path(previous).is_dir():
@@ -254,6 +260,7 @@ class PhotoApp:
         if self.busy:
             return
         chosen = filedialog.askdirectory(title='Bilderordner wählen', initialdir=self.source or str(Path.home()), parent=self.root)
+        self.canvas.focus_set()
         if not chosen:
             return
         cfg = self.library.settings(chosen)
@@ -298,14 +305,14 @@ class PhotoApp:
         self.run(work, done, 'Bilder werden geladen …')
 
     def key(self, event):
-        if self.busy or event.state & 0x000C:
+        if (self.busy or self.root.grab_current() is not None
+                or blocks_shortcut(event.state, self.window_system)):
             return
         # A key must be released before it can make another sorting decision.
         if getattr(self, '_key_down', None) == event.keysym:
             return 'break'
         if event.keysym in KEY_ACTIONS:
             self._key_down = event.keysym
-            self.root.bind('<KeyRelease-' + event.keysym + '>', lambda e: setattr(self, '_key_down', None))
             self.action(KEY_ACTIONS[event.keysym])
             return 'break'
         if event.keysym == 'F5':
@@ -314,6 +321,11 @@ class PhotoApp:
         if event.keysym == 'Return':
             self.open_zoom()
             return 'break'
+
+    def key_release(self, event):
+        # Also release the repeat guard while a file operation is still running.
+        if self._key_down == event.keysym:
+            self._key_down = None
 
     def action(self, action):
         if self.busy or not self.current:
