@@ -4,9 +4,9 @@ SwiftUI + PhotoKit, für iPhone mit iOS 17 oder neuer. Deutsches Interface.
 
 ## Windows-Programm
 
-FotoSwipe gibt es zusätzlich als eigenständiges Tool für **Windows 10 mit 64 Bit**: [Windows-Download](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137/artifacts/14579265459) · [Anleitung und Quellcode](Windows/README.md).
+FotoSwipe gibt es zusätzlich als eigenständiges Tool für **Windows 10 mit 64 Bit**: [Windows-Download](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406/artifacts/14775396820) · [Anleitung und Quellcode](Windows/README.md).
 
-Bilderordner und zwei Zielordner wählen, dann mit den vier Pfeiltasten sortieren. Rechts merkt für die gemeinsame Papierkorb-Aktion vor; oben/unten verschiebt in echte Ordner. Vollbild/Zoom, exakte Duplikate und der getrennt je Bilderordner gespeicherte Fortschritt sind enthalten. Die ZIP entpacken und `FotoSwipe.exe` starten; Python oder AltStore müssen dafür nicht installiert werden. 24 automatische Prüfungen und der Starttest der gepackten EXE sind bestanden. [Build ansehen](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137).
+Bilderordner und zwei Zielordner wählen, dann mit den vier Pfeiltasten sortieren. Rechts merkt für die gemeinsame Papierkorb-Aktion vor; oben/unten verschiebt in echte Ordner. Vollbild/Zoom, exakte Duplikate und der getrennt je Bilderordner gespeicherte Fortschritt sind enthalten. Die ZIP entpacken und `FotoSwipe.exe` starten; Python oder AltStore müssen dafür nicht installiert werden. Version 1.0.1 behebt die Pfeiltastensteuerung bei eingeschaltetem Num Lock. 27 automatische Prüfungen und der Fenstertest der gepackten EXE sind bestanden. [Build ansehen](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406).
 
 ## Neues in Version 1.2
 

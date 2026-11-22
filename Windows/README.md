@@ -10,9 +10,9 @@ Python und die benötigten Bilddecoder; Python muss nicht separat installiert we
 - Exakte Dateiduplikate mit SHA-256-Vorauswahl und abschließendem Bytevergleich.
 - JPEG, PNG, WebP, BMP, GIF, TIFF, HEIC/HEIF und AVIF über Pillow / pillow-heif.
 
-[Windows-Programm herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137/artifacts/14579265459) · [Bedienungsanleitung](ANLEITUNG.txt) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/44623439137)
+[Windows-Programm herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406/artifacts/14775396820) · [Bedienungsanleitung](ANLEITUNG.txt) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406)
 
-Bei GitHub anmelden, ZIP vollständig entpacken und `FotoSwipe.exe` starten. Unter Einstellungen zwei Zielordner wählen. Die Datei benötigt keine wöchentliche Freigabe. Der Download ist bis zum 19. Dezember 2026 verfügbar; eine bereits heruntergeladene EXE bleibt nutzbar.
+Bei GitHub anmelden, ZIP vollständig entpacken und `FotoSwipe.exe` starten. Unter Einstellungen zwei Zielordner wählen. Die Datei benötigt keine wöchentliche Freigabe. Der Download ist bis zum 22. Dezember 2026 verfügbar; eine bereits heruntergeladene EXE bleibt nutzbar.
 
 ## Bauen und prüfen
 
@@ -45,6 +45,12 @@ der Löschliste. Nicht-Bild-Begleitdateien werden nicht mitverarbeitet.
 Der Fortschritt liegt unter `%LOCALAPPDATA%\FotoSwipeWindows`, nicht neben der EXE.
 Die Merkliste der iPhone-App bleibt eigenständig.
 
+## Version 1.0.1 – Pfeiltasten unter Windows
+
+Die Tastatursteuerung funktioniert jetzt auch bei eingeschaltetem Num Lock. Die bisherige Version hatte dessen Windows-Tastaturstatus versehentlich als Alt-Taste interpretiert. Der Test der fertigen EXE schickt jetzt echte Tk-Tastenereignisse durch das fokussierte Fenster, statt nur die Aktionsmethode direkt aufzurufen. Er prüft alle vier Richtungen, Num Lock/Caps Lock/Scroll Lock, Loslassen während einer laufenden Aktion und die Sperre der Sortierung bei geöffneten Nebenfenstern.
+
+Zum Aktualisieren FotoSwipe schließen und die alte EXE durch die neue ersetzen. Der Fortschritt und die Löschliste unter `%LOCALAPPDATA%\FotoSwipeWindows` bleiben erhalten; der gewählte Bilderordner muss derselbe bleiben.
+
 ## Prüfstatus
 
-Am 19. November 2026 sind alle 24 automatischen Prüfungen auf Windows erfolgreich durchgelaufen, einschließlich HEIC-Dekodierung, 2.307 gespeicherter Entscheidungen, Fehlerfällen beim Verschieben, Namenskollisionen, Wiederaufnahme nach Unterbrechungen und dem Erhalt des gewählten Duplikat-Exemplars. Die fertige EXE hat außerdem den Desktop-Starttest mit allen vier Pfeiltasten, den Nebenfenstern, Zoom-Canvas und dem nativen Windows-Papierkorb bestanden. Gebaut und geprüft wurde im Windows-2022-Buildsystem. Der erste Start auf deinem eigenen Windows-10-PC steht noch aus.
+Am 22. November 2026 sind alle 27 automatischen Prüfungen auf Windows erfolgreich durchgelaufen. Auch der Fenstertest der fertigen EXE mit den vier Pfeiltasten und Windows-Tastaturzuständen, Nebenfenstern, Zoom und dem nativen Papierkorb ist bestanden. Gebaut und geprüft wurde im Windows-2022-Buildsystem; die Bestätigung auf deinem eigenen Windows-10-PC steht noch aus.
