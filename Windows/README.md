@@ -10,9 +10,9 @@ Python und die benötigten Bilddecoder; Python muss nicht separat installiert we
 - Exakte Dateiduplikate mit SHA-256-Vorauswahl und abschließendem Bytevergleich.
 - JPEG, PNG, WebP, BMP, GIF, TIFF, HEIC/HEIF und AVIF über Pillow / pillow-heif.
 
-[Windows-Programm herunterladen](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406/artifacts/14775396820) · [Bedienungsanleitung](ANLEITUNG.txt) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406)
+[Windows-Programm herunterladen](https://github.com/marswers-prog/fotoswipe/releases/download/windows-v1.0.1/FotoSwipe-Windows-1.0.1.zip) · [Bedienungsanleitung](ANLEITUNG.txt) · [Erfolgreicher Build](https://github.com/marswers-prog/fotoswipe/actions/runs/45076375406)
 
-Bei GitHub anmelden, ZIP vollständig entpacken und `FotoSwipe.exe` starten. Unter Einstellungen zwei Zielordner wählen. Die Datei benötigt keine wöchentliche Freigabe. Der Download ist bis zum 22. Dezember 2026 verfügbar; eine bereits heruntergeladene EXE bleibt nutzbar.
+Die ZIP über den direkten Release-Download ohne GitHub-Anmeldung herunterladen, vollständig entpacken und `FotoSwipe.exe` starten. Unter Einstellungen zwei Zielordner wählen. Die Datei benötigt keine wöchentliche Freigabe. Der Release-Download hat keine automatische Ablaufzeit wie ein Actions-Artefakt.
 
 ## Bauen und prüfen
 
