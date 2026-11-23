@@ -1,0 +1,67 @@
+name: Windows 1.0.1 als direkten Download bereitstellen
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/release-windows-1.0.1.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: fotoswipe-windows-release-1.0.1
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Getestete Windows-ZIP bereitstellen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Geprueften Build herunterladen und verifizieren
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/actions/runs/45076375406" > "$RUNNER_TEMP/run.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          run = json.loads((Path(os.environ['RUNNER_TEMP']) / 'run.json').read_text())
+          assert run['conclusion'] == 'success', 'Source build did not succeed'
+          assert run['head_sha'] == '9f6ba68fa4bcc3b08daea979eba2f99ce65ed32e', 'Unexpected source commit'
+          PY
+          gh api "repos/$GH_REPO/actions/artifacts/14775396820/zip" > "$RUNNER_TEMP/FotoSwipe-Windows-1.0.1.zip"
+          cd "$RUNNER_TEMP"
+          echo '09dd9228b62de22fd51cb082c3a1296b40eee6240a73ac678bcf3f903a0e3fc5  FotoSwipe-Windows-1.0.1.zip' > SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+
+      - name: Direkten Windows-Download veroeffentlichen
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
+          FotoSwipe für Windows 10 (64 Bit), Version 1.0.1.
+
+          ZIP herunterladen, vollständig entpacken und FotoSwipe.exe starten. Python muss nicht installiert werden.
+
+          Diese Version behebt die Pfeiltastensteuerung bei eingeschaltetem Num Lock. Links behält, rechts merkt zum Löschen vor, oben/unten verschiebt in die gewählten Ordner. Vollbild/Zoom und die Suche nach exakten Duplikaten sind enthalten.
+
+          Update: FotoSwipe schließen und die bisherige EXE durch die neue ersetzen. Fortschritt und Löschliste im Windows-Benutzerprofil bleiben erhalten.
+
+          Alle 27 Prüfungen und der Fenstertest der fertigen EXE mit den vier Pfeiltasten wurden im Windows-Buildsystem erfolgreich ausgeführt.
+          NOTES
+          if gh release view windows-v1.0.1 > /dev/null 2>&1; then
+            echo 'Release already exists; leaving existing files unchanged.'
+            exit 0
+          fi
+          gh release create windows-v1.0.1 \
+            "$RUNNER_TEMP/FotoSwipe-Windows-1.0.1.zip" "$RUNNER_TEMP/SHA256SUMS.txt" \
+            --target 9f6ba68fa4bcc3b08daea979eba2f99ce65ed32e \
+            --title "FotoSwipe für Windows 1.0.1" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --latest=false
